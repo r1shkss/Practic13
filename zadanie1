@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace malek2
+{
+    public class Employee
+    {
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public decimal Salary { get; set; }
+        public DateTime HireDate { get; set; }
+
+        public Employee(string name, string position, decimal salary, DateTime hireDate)
+        {
+            Name = name;
+            Position = position;
+            Salary = salary;
+            HireDate = hireDate;
+        }
+
+        public virtual void GetInfo()
+        {
+            Console.WriteLine($"Сотрудник: {Name}");
+            Console.WriteLine($"Должность: {Position}");
+            Console.WriteLine($"Зарплата: {Salary} руб.");
+            Console.WriteLine($"Дата приема: {HireDate:dd.MM.yyyy}");
+        }
+
+    }
+}
+internal class Director : Employee
+{
+    public string Department { get; set; }
+    public Director(string name, decimal salary, DateTime hireDate, string department)
+        : base(name, "Директор", salary, hireDate)
+    {
+        Department = department;
+    }
+    public void ApproveBudget()
+    {
+        Console.WriteLine($"Директор {Name} утверждает бюджет для отдела {Department}.");
+    }
+    public override void GetInfo()
+    {
+        base.GetInfo();
+        Console.WriteLine($"Отдел: {Department}");
+    }
+}
+internal class Developer : Employee
+{
+    public string ProgrammingLanguage { get; set; }
+    public Developer(string name, decimal salary, DateTime hireDate, string programmingLanguage)
+        : base(name, "Разработчик", salary, hireDate)
+    {
+        ProgrammingLanguage = programmingLanguage;
+    }
+    public void WriteCode()
+    {
+        Console.WriteLine($"Разработчик {Name} пишет код на {ProgrammingLanguage}.");
+    }
+    public override void GetInfo()
+    {
+        base.GetInfo();
+        Console.WriteLine($"Язык программирования: {ProgrammingLanguage}");
+    }
+}
+internal class Manager : Employee
+{
+    public int TeamSize { get; set; }
+
+    public Manager(string name, decimal salary, DateTime hireDate, int teamSize)
+        : base(name, "Менеджер", salary, hireDate) 
+    {
+        TeamSize = teamSize;
+    }
+    public void ConductMeeting()
+    {
+        Console.WriteLine($"Менеджер {Name} проводит собрание с командой из {TeamSize} человек.");
+    }
+    public override void GetInfo()
+    {
+        base.GetInfo();
+        Console.WriteLine($"Размер команды: {TeamSize}");
+    }
+}
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Manager manager = new Manager("Мария Белякова", 80000, new DateTime(2020, 5, 15), 5);
+        Developer developer = new Developer("Игорь Котов", 120000, new DateTime(2022, 1, 10), "C#");
+        Director director = new Director("Дмитрий Иванов", 200000, new DateTime(2018, 3, 1), "Разработка");
+        Employee[] employees = { manager, developer, director };
+
+        foreach (var emp in employees)
+        {
+            emp.GetInfo();
+            Console.WriteLine(new string('-', 30));
+        }
+        manager.ConductMeeting();
+        developer.WriteCode();
+        director.ApproveBudget();
+    }
+}
