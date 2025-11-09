@@ -1,0 +1,203 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    internal class Course
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Author { get; set; }
+        public decimal Price { get; set; }
+
+        public Course(string title, string description, string author, decimal price)
+        {
+            Title = title;
+            Description = description;
+            Author = author;
+            Price = price;
+        }
+
+        public virtual void DisplayCourseInfo()
+        {
+            Console.WriteLine($"Название: {Title}");
+            Console.WriteLine($"Описание: {Description}");
+            Console.WriteLine($"Автор: {Author}");
+            Console.WriteLine($"Цена: {Price} руб.");
+        }
+
+        public virtual void StartLearning()
+        {
+            Console.WriteLine($"Начало обучения на курсе: {Title}");
+        }
+    }
+}
+internal class VideoCourse : Course
+{
+    public int VideoCount { get; set; }
+    public TimeSpan TotalDuration { get; set; }
+
+    public VideoCourse(string title, string description, string author, decimal price,
+                      int videoCount, TimeSpan totalDuration)
+        : base(title, description, author, price)
+    {
+        VideoCount = videoCount;
+        TotalDuration = totalDuration;
+    }
+
+    public override void DisplayCourseInfo()
+    {
+        base.DisplayCourseInfo();
+        Console.WriteLine($"Количество видео: {VideoCount}");
+        Console.WriteLine($"Общая длительность: {TotalDuration.TotalHours:0.##} часов");
+    }
+
+    public override void StartLearning()
+    {
+        base.StartLearning();
+        Console.WriteLine("Запуск видеоплеера...");
+        Console.WriteLine($"Доступно {VideoCount} видеоуроков");
+    }
+
+    public void PlayVideo(int videoNumber)
+    {
+        if (videoNumber < 1 || videoNumber > VideoCount)
+        {
+            throw new ArgumentException("Номер видео недействителен");
+        }
+        Console.WriteLine($"Воспроизведение видео №{videoNumber}");
+    }
+}
+internal class TextCourse : Course
+{
+    public int ChapterCount { get; set; }
+    public int TotalTextVolume { get; set; }
+
+    public TextCourse(string title, string description, string author, decimal price,
+                     int chapterCount, int totalTextVolume)
+        : base(title, description, author, price)
+    {
+        ChapterCount = chapterCount;
+        TotalTextVolume = totalTextVolume;
+    }
+
+    public override void DisplayCourseInfo()
+    {
+        base.DisplayCourseInfo();
+        Console.WriteLine($"Количество глав: {ChapterCount}");
+        Console.WriteLine($"Объем текста: {TotalTextVolume} страниц");
+    }
+
+    public override void StartLearning()
+    {
+        base.StartLearning();
+        Console.WriteLine("Открытие текстового материала...");
+        Console.WriteLine($"Доступно {ChapterCount} глав для изучения");
+    }
+
+    public void ReadChapter(int chapterNumber)
+    {
+        if (chapterNumber < 1 || chapterNumber > ChapterCount)
+        {
+            throw new ArgumentException("Номер главы недействителен");
+        }
+        Console.WriteLine($"Чтение главы №{chapterNumber}");
+    }
+}
+internal class InteractiveCourse : Course
+{
+    public int ExerciseCount { get; set; }
+    public string CheckingSystem { get; set; }
+
+    public InteractiveCourse(string title, string description, string author, decimal price,
+                           int exerciseCount, string checkingSystem)
+        : base(title, description, author, price)
+    {
+        ExerciseCount = exerciseCount;
+        CheckingSystem = checkingSystem;
+    }
+
+    public override void DisplayCourseInfo()
+    {
+        base.DisplayCourseInfo();
+        Console.WriteLine($"Количество упражнений: {ExerciseCount}");
+        Console.WriteLine($"Система проверки: {CheckingSystem}");
+    }
+
+    public override void StartLearning()
+    {
+        base.StartLearning();
+        Console.WriteLine("Запуск интерактивной среды...");
+        Console.WriteLine($"Доступно {ExerciseCount} упражнений");
+    }
+
+    public void StartExercise(int exerciseNumber)
+    {
+        if (exerciseNumber < 1 || exerciseNumber > ExerciseCount)
+        {
+            throw new ArgumentException("Номер упражнения недействителен");
+        }
+        Console.WriteLine($"Запуск упражнения №{exerciseNumber}");
+        Console.WriteLine($"Проверка через систему: {CheckingSystem}");
+    }
+
+    public void SubmitSolution(int exerciseNumber, string solution)
+    {
+        Console.WriteLine($"Решение для упражнения №{exerciseNumber} отправлено");
+        Console.WriteLine($"Проверка в системе: {CheckingSystem}");
+    }
+}
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        VideoCourse videoCourse = new VideoCourse(
+         "C# для начинающих",
+         "Полный курс по основам C#",
+         "Иван Петров",
+         5000,
+         45,
+         new TimeSpan(18, 30, 0)
+     );
+
+        TextCourse textCourse = new TextCourse(
+            "Алгоритмы и структуры данных",
+            "Теоретический курс по алгоритмам",
+            "Анна Сидорова",
+            3000,
+            12,
+            350
+        );
+
+        InteractiveCourse interactiveCourse = new InteractiveCourse(
+            "Практикум по SQL",
+            "Интерактивный курс по базам данных",
+            "Петр Иванов",
+            6000,
+            25,
+            "AutoSQLChecker"
+        );
+
+        Console.WriteLine("Видеокурс");
+        videoCourse.DisplayCourseInfo();
+        videoCourse.StartLearning();
+        videoCourse.PlayVideo(1);
+        Console.WriteLine();
+
+        Console.WriteLine("Текстовый курс");
+        textCourse.DisplayCourseInfo();
+        textCourse.StartLearning();
+        textCourse.ReadChapter(1);
+        Console.WriteLine();
+
+        Console.WriteLine("Интерактивный курс");
+        interactiveCourse.DisplayCourseInfo();
+        interactiveCourse.StartLearning();
+        interactiveCourse.StartExercise(1);
+        interactiveCourse.SubmitSolution(1, "SELECT * FROM users;");
+        Console.WriteLine();
+    }
+}
