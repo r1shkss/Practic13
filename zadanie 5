@@ -1,0 +1,173 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace priora
+{
+    public class Animal
+    {
+        public string Species { get; set; }
+        public int Age { get; set; }
+        public string Habitat { get; set; }
+        public string Diet { get; set; }
+
+        public Animal(string species, int age, string habitat, string diet)
+        {
+            Species = species;
+            Age = age;
+            Habitat = habitat;
+            Diet = diet;
+        }
+
+        public virtual void GetInfo()
+        {
+            Console.WriteLine($"Вид: {Species}");
+            Console.WriteLine($"Возраст: {Age} лет");
+            Console.WriteLine($"Среда обитания: {Habitat}");
+            Console.WriteLine($"Рацион: {Diet}");
+        }
+
+        public void Feed()
+        {
+            Console.WriteLine($"Животное {Species} получает корм: {Diet}");
+        }
+    }
+
+    internal class Mammal : Animal
+    {
+        public string FurType { get; set; }
+        public int GestationPeriod { get; set; }
+
+        public Mammal(string species, int age, string habitat, string diet, string furType, int gestationPeriod)
+            : base(species, age, habitat, diet)
+        {
+            FurType = furType;
+            GestationPeriod = gestationPeriod;
+        }
+
+        public void FeedMilk()
+        {
+            Console.WriteLine($"Млекопитающее {Species} кормит детенышей молоком");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Тип меха: {FurType}");
+            Console.WriteLine($"Продолжительность беременности: {GestationPeriod} месяцев");
+            Console.WriteLine("Класс: Млекопитающее");
+        }
+    }
+
+    internal class Bird : Animal
+    {
+        public double Wingspan { get; set; }
+        public string NestingType { get; set; }
+
+        public Bird(string species, int age, string habitat, string diet, double wingspan, string nestingType)
+            : base(species, age, habitat, diet)
+        {
+            Wingspan = wingspan;
+            NestingType = nestingType;
+        }
+
+        public void Fly()
+        {
+            Console.WriteLine($"Птица {Species} летает с размахом крыльев {Wingspan} метров");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Размах крыльев: {Wingspan} м");
+            Console.WriteLine($"Тип гнездования: {NestingType}");
+            Console.WriteLine("Класс: Птица");
+        }
+    }
+
+    internal class Reptile : Animal
+    {
+        public string SkinType { get; set; }
+        public int EnvironmentTemperature { get; set; }
+
+        public Reptile(string species, int age, string habitat, string diet, string skinType, int environmentTemperature)
+            : base(species, age, habitat, diet)
+        {
+            SkinType = skinType;
+            EnvironmentTemperature = environmentTemperature;
+        }
+
+        public void BaskInSun()
+        {
+            Console.WriteLine($"Рептилия {Species} греется при температуре {EnvironmentTemperature}°C");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Тип кожи: {SkinType}");
+            Console.WriteLine($"Температура среды: {EnvironmentTemperature}°C");
+            Console.WriteLine("Класс: Рептилия");
+        }
+    }
+
+    internal class Fish : Animal
+    {
+        public string ScaleType { get; set; }
+        public int HabitatDepth { get; set; }
+
+        public Fish(string species, int age, string habitat, string diet, string scaleType, int habitatDepth)
+            : base(species, age, habitat, diet)
+        {
+            ScaleType = scaleType;
+            HabitatDepth = habitatDepth;
+        }
+
+        public void Swim()
+        {
+            Console.WriteLine($"Рыба {Species} плавает на глубине {HabitatDepth} метров");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Тип чешуи: {ScaleType}");
+            Console.WriteLine($"Глубина обитания: {HabitatDepth} м");
+            Console.WriteLine("Класс: Рыба");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Mammal lion = new Mammal("Африканский лев", 5, "Саванна", "Мясо", "Короткая шерсть", 4);
+            Bird eagle = new Bird("Беркут", 3, "Горы", "Мясо", 2.3, "На скалах");
+            Reptile snake = new Reptile("Королевская кобра", 6, "Джунгли", "Мясо", "Чешуйчатая", 28);
+            Fish shark = new Fish("Большая белая акула", 8, "Океан", "Рыба", "Плакоидная", 300);
+
+            Animal[] animals = { lion, eagle, snake, shark };
+
+            Console.WriteLine("Информация о животных зоопарка");
+            foreach (var animal in animals)
+            {
+                animal.GetInfo(); 
+                Console.WriteLine(" ");
+            }
+
+            Console.WriteLine("\nДемонстрация поведения животнфх");
+            lion.FeedMilk();
+            eagle.Fly();
+            snake.BaskInSun();
+            shark.Swim();
+
+            Console.WriteLine("\nПроцесс кормления");
+            foreach (var animal in animals)
+            {
+                animal.Feed();
+            }
+        }
+    }
+}
