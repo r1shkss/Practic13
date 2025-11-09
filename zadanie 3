@@ -178,7 +178,7 @@ namespace priora
             foreach (var item in items)
             {
                 item.GetInfo();
-                Console.WriteLine(new string('-', 40));
+                Console.WriteLine(" ");
             }
 
             Console.WriteLine("\nДемонстрация специфических методов");
