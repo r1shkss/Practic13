@@ -1,0 +1,201 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LibrarySystem
+{
+    public class LibraryItem
+    {
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int Year { get; set; }
+        public bool IsAvailable { get; set; }
+        public string ItemId { get; set; }
+
+        public LibraryItem(string title, string author, int year, string itemId)
+        {
+            Title = title;
+            Author = author;
+            Year = year;
+            ItemId = itemId;
+            IsAvailable = true;
+        }
+
+        public virtual void GetInfo()
+        {
+            Console.WriteLine($"Название: {Title}");
+            Console.WriteLine($"Автор: {Author}");
+            Console.WriteLine($"Год издания: {Year}");
+            Console.WriteLine($"ID: {ItemId}");
+            Console.WriteLine($"Статус: {(IsAvailable ? "Доступен" : "Выдан")}");
+        }
+
+        public void CheckOut()
+        {
+            if (IsAvailable)
+            {
+                IsAvailable = false;
+                Console.WriteLine($"{Title} выдан читателю.");
+            }
+            else
+            {
+                Console.WriteLine($"{Title} уже выдан.");
+            }
+        }
+
+        public void Return()
+        {
+            if (!IsAvailable)
+            {
+                IsAvailable = true;
+                Console.WriteLine($"{Title} возвращен в библиотеку.");
+            }
+            else
+            {
+                Console.WriteLine($"{Title} уже в библиотеке.");
+            }
+        }
+    }
+
+    internal class Book : LibraryItem
+    {
+        public int PageCount { get; set; }
+        public string ISBN { get; set; }
+
+        public Book(string title, string author, int year, string itemId, int pageCount, string isbn)
+            : base(title, author, year, itemId)
+        {
+            PageCount = pageCount;
+            ISBN = isbn;
+        }
+
+        public void ReadSample()
+        {
+            Console.WriteLine($"Чтение отрывка из книги '{Title}'...");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Количество страниц: {PageCount}");
+            Console.WriteLine($"ISBN: {ISBN}");
+            Console.WriteLine("Тип: Книга");
+        }
+    }
+
+    internal class Magazine : LibraryItem
+    {
+        public int IssueNumber { get; set; }
+        public string Periodicity { get; set; }
+
+        public Magazine(string title, string author, int year, string itemId, int issueNumber, string periodicity)
+            : base(title, author, year, itemId)
+        {
+            IssueNumber = issueNumber;
+            Periodicity = periodicity;
+        }
+
+        public void BrowseArticles()
+        {
+            Console.WriteLine($"Просмотр статей в журнале '{Title}', выпуск {IssueNumber}...");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Номер выпуска: {IssueNumber}");
+            Console.WriteLine($"Периодичность: {Periodicity}");
+            Console.WriteLine("Тип: Журнал");
+        }
+    }
+
+    internal class DVD : LibraryItem
+    {
+        public int Duration { get; set; }
+        public string Rating { get; set; }
+
+        public DVD(string title, string author, int year, string itemId, int duration, string rating)
+            : base(title, author, year, itemId)
+        {
+            Duration = duration;
+            Rating = rating;
+        }
+
+        public void PlayTrailer()
+        {
+            Console.WriteLine($"Воспроизведение трейлера '{Title}'...");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Продолжительность: {Duration} минут");
+            Console.WriteLine($"Рейтинг: {Rating}");
+            Console.WriteLine("Тип: DVD");
+        }
+    }
+
+    internal class Audiobook : LibraryItem
+    {
+        public int Duration { get; set; }
+        public string Narrator { get; set; }
+
+        public Audiobook(string title, string author, int year, string itemId, int duration, string narrator)
+            : base(title, author, year, itemId)
+        {
+            Duration = duration;
+            Narrator = narrator;
+        }
+
+        public void PlaySample()
+        {
+            Console.WriteLine($"Воспроизведение отрывка аудиокниги '{Title}' в исполнении {Narrator}...");
+        }
+
+        public override void GetInfo()
+        {
+            base.GetInfo();
+            Console.WriteLine($"Длительность: {Duration} минут");
+            Console.WriteLine($"Диктор: {Narrator}");
+            Console.WriteLine("Тип: Аудиокнига");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Book book = new Book("Война и мир", "Лев Толстой", 1869, "BK001", 1225, "978-5-699-12345-7");
+            Magazine magazine = new Magazine("Forbes", "Разные авторы", 2024, "MG002", 156, "Ежемесячный");
+            DVD dvd = new DVD("Властелин Колец", "Питер Джексон", 2001, "DV001", 178, "PG-13");
+            Audiobook audiobook = new Audiobook("Алиса в Стране чудес", "Льюис Кэрролл", 1865, "AB006", 180, "Татьяна Веселова");
+
+            LibraryItem[] items = { book, magazine, dvd, audiobook };
+
+            Console.WriteLine("Информация о библиотечных материалах");
+            foreach (var item in items)
+            {
+                item.GetInfo();
+                Console.WriteLine(new string('-', 40));
+            }
+
+            Console.WriteLine("\nДемонстрация специфических методов");
+            book.ReadSample();
+            magazine.BrowseArticles();
+            dvd.PlayTrailer();
+            audiobook.PlaySample();
+
+            Console.WriteLine("\nРабота со статусами");
+            book.CheckOut();
+            dvd.CheckOut();
+            book.GetInfo();
+            dvd.GetInfo();
+
+            Console.WriteLine("\nВозврат материалов");
+            book.Return();
+            book.GetInfo();
+        }
+    }
+}
